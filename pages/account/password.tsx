@@ -2,13 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Meta from "../../components/Shared/Meta";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { toast } from "react-toastify";
-import { IUser } from "../../models/type";
 import { useDispatch } from "react-redux";
-import { changepass, signout } from "../../features/auth/auth.slice";
+import { changepass } from "../../features/auth/auth.slice";
 import Link from "next/link";
-// import "./index.css"
 
 type TypeInputs = {
   password: string;
@@ -18,6 +16,7 @@ type TypeInputs = {
 };
 
 const ChangePasswordPage = () => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const {
     register,
@@ -48,7 +47,7 @@ const ChangePasswordPage = () => {
   const onSubmit: SubmitHandler<TypeInputs> = async (user) => {
     try {
       await dispatch(changepass({ ...user, email }) as any).unwrap();
-      Router.push("/login")
+      router.push("/login")
     } catch (error : any) {
       toast.error("Mật khẩu cũ không chính xác");
         // setErrorEmail("Mật khẩu cũ không chính xác")
