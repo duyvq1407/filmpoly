@@ -35,7 +35,7 @@ const FavoriteList: NextPage = () => {
     (async () => {
       Promise.all(listfavoritemovie.map( async (item: any): Promise<any> => {
         const {data} = await getMovieDetails(item.mediaId);
-        return data
+        return {...data, media_type: "movie"}
       })).then((value:any) => setListMovie(value))
 
       Promise.all(listfavoritetv.map( async (item: any): Promise<any> => {
@@ -43,7 +43,7 @@ const FavoriteList: NextPage = () => {
         return {...data, media_type: "tv"}
       })).then((value:any) => setListTV(value))
     })()    
-  }, [listfavoritemovie.length || listfavoritetv.length])
+  }, [(listfavoritemovie.length + listfavoritetv.length)])
 
   return (
     <>
