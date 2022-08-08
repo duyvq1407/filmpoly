@@ -84,7 +84,7 @@ const authSlice = createSlice({
     builder.addCase(changepass.fulfilled, (state, action) => {
       state = initialState;
       localStorage.removeItem("persist:root");
-      // state.isLoggedIn = false
+      state.isLoggedIn = false
     });
     builder.addCase(changepass.rejected, (state, action) => {
       state.error = action.error;
