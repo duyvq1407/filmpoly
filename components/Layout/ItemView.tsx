@@ -12,7 +12,8 @@ import MovieSlider from "../Movie/MovieSlider";
 import type { NextPage } from "next";
 import StarRating from "../Display/StarRating";
 import { useDispatch, useSelector } from "react-redux";
-import { addFavoriteMovie } from "../../api/favoritemovie";
+import { addmedia } from "../../features/favorite/favorite.slice";
+import { toast } from "react-toastify";
 
 interface ItemViewProps {
     media_type: "movie" | "tv";
@@ -32,14 +33,14 @@ const ItemView: NextPage<ItemViewProps> = ({
     const dispatch = useDispatch()
     const [trailerModalOpened, setTrailerModalOpened] = useState(false);
     const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
-    const userId = useSelector((state: any) => state.auth.value.user._id);
+    const userId: string = useSelector((state: any) => state.auth.value.user._id);
     
-    const handleAddFavorite = async (movieId: string) => {
+    const handleAddFavorite = async (mediaId: string, media_type: number, name: string) => {
         try {
-            await dispatch(addFavoriteMovie({movieId, userId}) as any).unwrap()
-            
-        } catch (error) {
-            
+            await dispatch(addmedia({mediaId, userId, media_type}) as any).unwrap()
+            toast.success(`Đã thêm ${name} vào danh sách yêu thích`)
+        } catch (error: any) {
+            toast.error(`${name} đã có trong danh sách yêu thích`)            
         }
     }
     return (
@@ -97,8 +98,8 @@ const ItemView: NextPage<ItemViewProps> = ({
                                     <span>Xem Trailer</span>
                                 </Button>
                             )}
-                            {isLoggedIn &&(
-                                <Button onClick={(e) => {e.preventDefault(); handleAddFavorite(data.id.toString())}}>
+                            {(isLoggedIn) &&(
+                                <Button onClick={(e) => {handleAddFavorite(data.id.toString(), media_type === "movie" ? 0 : 1, media_type === "movie" ? data.title  : data.name )}}>
                                     <FaBookmark />
                                     Lưu
                                 </Button>
